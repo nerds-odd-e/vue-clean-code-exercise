@@ -17,10 +17,13 @@
 </style>
 
 <script>
+  import TimeProvider from "../domain/timeProvider";
+
   export default {
     data() {
       return {
-        profile: { name: 'Jackson', birthday: {month: 10, day: 18}}
+        profile: { name: 'Jackson', birthday: {month: 10, day: 18}},
+        today: new Date()
       }
     },
     computed: {
@@ -30,12 +33,14 @@
     },
     methods: {
       _isBirthday() {
-        let today = new Date()
-        return today.getMonth() === this.profile.birthday.month - 1 && today.getDate() === this.profile.birthday.day
+        return this.today.getMonth() === this.profile.birthday.month - 1 && this.today.getDate() === this.profile.birthday.day
       },
       goToProfile(){
         this.$router.push('/profile')
       },
+    },
+    beforeMount() {
+      TimeProvider.getDatePromise().then(today => this.today = today)
     }
   }
 </script>
